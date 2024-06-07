@@ -1,4 +1,4 @@
-- This as an attempt at making Tetris in python.
+This as an attempt at making Tetris in python. <br>
 
 # Changelog
 - Added sprites and game board to project
