@@ -1,5 +1,13 @@
 import pygame, random
 
+def generateBackground(surf:pygame.Surface, x_tiles:int, y_tiles:int) -> pygame.Surface:
+    ret_surf = pygame.Surface([surf.get_width() * x_tiles, surf.get_height() * y_tiles])
+    for y in range(y_tiles):
+        for x in range(x_tiles):
+            ret_surf.blit(surf, [x * surf.get_width(), y * surf.get_height()])
+    return ret_surf
+    
+
 def loadTiles(tile_size:int) -> list:
     tile = pygame.image.load('assets/tile.png')
     tile = pygame.transform.scale(tile, [tile_size, tile_size])
@@ -27,21 +35,22 @@ def loadTiles(tile_size:int) -> list:
     return [cyan_tile, yellow_tile, purple_tile, green_tile, blue_tile, red_tile, orange_tile]
 
 class Board:
-    def __init__(self, position:list, tile_dimensions:list, tile_size:int):
+    def __init__(self, position:list, x_tiles:int, y_tiles:int, tile_size:int):
         self.tile_list = []
         self.position = position
         self.tile_size = tile_size
         self.sprite_list = loadTiles(tile_size)
-        for y in range(tile_dimensions[1]):
+        for y in range(y_tiles):
             app = []
-            for x in range(tile_dimensions[0]):
-                if random.randint(0, 1) == 0:
-                    app.append(random.randint(0, len(self.sprite_list)-1))
-                else:
-                    app.append(-1)
+            for x in range(x_tiles):
+                app.append(-1)
             self.tile_list.append(app)
     
     def draw(self, surf:pygame.Surface):
+        y_size = self.tile_size * len(self.tile_list)
+        x_size = self.tile_size * len(self.tile_list[0])
+        pygame.draw.rect(surf, [75, 75, 75], [self.position[0], self.position[1], x_size, y_size])
+        pygame.draw.rect(surf, [0, 0, 0], [self.position[0], self.position[1], x_size, y_size], 1)
         for y_index, y in enumerate(self.tile_list):
             for x_index, x in enumerate(y):
                 if x != -1:
